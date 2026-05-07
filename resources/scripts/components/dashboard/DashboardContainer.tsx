@@ -62,9 +62,10 @@ export default () => {
                 {rootAdmin && (
                     <div css={tw`flex items-center bg-black/40 p-2 px-4 rounded-xl border border-white/5`}>
                         <p css={tw`uppercase text-[10px] font-bold tracking-wider text-neutral-500 mr-4`}>
-                            {showOnlyAdmin ? "ADMIN VIEW" : 'USER VIEW'}
+                            {showOnlyAdmin ? 'ADMIN VIEW' : 'USER VIEW'}
                         </p>
                         <Switch
+
                             name={'show_all_servers'}
                             defaultChecked={showOnlyAdmin}
                             onChange={() => setShowOnlyAdmin((s) => !s)}

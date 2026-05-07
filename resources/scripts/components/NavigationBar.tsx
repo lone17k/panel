@@ -6,7 +6,7 @@ import { faCogs, faLayerGroup, faSignOutAlt } from '@fortawesome/free-solid-svg-
 import { useStoreState } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
 import SearchContainer from '@/components/dashboard/search/SearchContainer';
-import tw, { theme } from 'twin.macro';
+import tw from 'twin.macro';
 import styled from 'styled-components/macro';
 import http from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -79,7 +79,11 @@ export default () => {
                     )}
                     <Tooltip placement={'bottom'} content={'Account Settings'}>
                         <NavLink to={'/account'}>
-                            <span className={'flex items-center w-6 h-6 rounded-full overflow-hidden border border-white/10'}>
+                            <span
+                                className={
+                                    'flex items-center w-6 h-6 rounded-full overflow-hidden border border-white/10'
+                                }
+                            >
                                 <Avatar.User />
                             </span>
                         </NavLink>
@@ -94,4 +98,5 @@ export default () => {
         </div>
     );
 };
+
 

@@ -106,7 +106,6 @@ const EditorContainer = styled.div`
     }
 `;
 
-
 export interface Props {
     style?: React.CSSProperties;
     initialContent?: string;
