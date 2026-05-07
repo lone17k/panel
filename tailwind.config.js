@@ -53,6 +53,7 @@ module.exports = {
                     950: '#0a0a0a',
                 },
                 cyan: colors.cyan,
+                emerald: colors.emerald,
             },
 
             fontSize: {
