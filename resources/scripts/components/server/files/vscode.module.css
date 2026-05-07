@@ -1,0 +1,213 @@
+:root {
+    --vscode-bg: #1e1e1e;
+    --vscode-side-bar-bg: #252526;
+    --vscode-activity-bar-bg: #333333;
+    --vscode-status-bar-bg: #007acc;
+    --vscode-editor-bg: #1e1e1e;
+    --vscode-border: #3c3c3c;
+    --vscode-text: #cccccc;
+    --vscode-text-bright: #ffffff;
+    --vscode-accent: #007acc;
+    --vscode-selection: #264f78;
+    --vscode-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 12rem);
+    background: var(--vscode-bg);
+    color: var(--vscode-text);
+    border: 1px solid var(--vscode-border);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    box-shadow: var(--vscode-shadow);
+}
+
+
+.main_layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.activity_bar {
+    width: 48px;
+    background: var(--vscode-activity-bar-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 12px;
+    border-right: 1px solid var(--vscode-border);
+}
+
+.activity_icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: color 0.2s, border-left 0.2s;
+    position: relative;
+}
+
+.activity_icon:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.activity_icon.active {
+    color: #fff;
+    border-left: 2px solid #fff;
+}
+
+.side_bar {
+    width: 260px;
+    background: var(--vscode-side-bar-bg);
+    border-right: 1px solid var(--vscode-border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.side_bar_header {
+    padding: 10px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #858585;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.editor_area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--vscode-editor-bg);
+    min-width: 0;
+}
+
+.editor_header {
+    height: 40px;
+    background: #252526;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    border-bottom: 1px solid var(--vscode-border);
+}
+
+.tab {
+    padding: 0 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    background: #2d2d2d;
+    border-right: 1px solid var(--vscode-border);
+    font-size: 13px;
+    color: #969696;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+}
+
+.tab:hover {
+    background: #323233;
+    color: #fff;
+}
+
+.tab.active {
+    background: var(--vscode-editor-bg);
+    color: #fff;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--vscode-accent);
+}
+
+
+.breadcrumbs {
+    padding: 8px 16px;
+    background: var(--vscode-editor-bg);
+    font-size: 12px;
+    color: #858585;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status_bar {
+    height: 22px;
+    background: var(--vscode-status-bar-bg);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #fff;
+    justify-content: space-between;
+}
+
+.status_item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 5px;
+    height: 100%;
+}
+
+.status_item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+}
+
+/* File Tree Styles */
+.file_item {
+    padding: 4px 20px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #cccccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file_item:hover {
+    background: #2a2d2e;
+}
+
+.file_item.active {
+    background: #37373d;
+    color: #fff;
+}
+
+.file_icon {
+    width: 16px;
+    opacity: 0.8;
+}
+
+/* Scrollbar styling */
+.side_bar::-webkit-scrollbar {
+    width: 10px;
+}
+
+.side_bar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.side_bar::-webkit-scrollbar-thumb {
+    background: rgba(121, 121, 121, 0.4);
+}
+
+.side_bar::-webkit-scrollbar-thumb:hover {
+    background: rgba(121, 121, 121, 0.6);
+}

@@ -54,18 +54,25 @@ export default () => {
 
     return (
         <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
-            {rootAdmin && (
-                <div css={tw`mb-2 flex justify-end items-center`}>
-                    <p css={tw`uppercase text-xs text-neutral-400 mr-2`}>
-                        {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
-                    </p>
-                    <Switch
-                        name={'show_all_servers'}
-                        defaultChecked={showOnlyAdmin}
-                        onChange={() => setShowOnlyAdmin((s) => !s)}
-                    />
+            <div css={tw`mb-8 flex items-center justify-between bg-white/5 p-6 rounded-2xl border border-white/5`}>
+                <div>
+                    <h1 css={tw`text-3xl font-header font-bold text-white mb-1`}>Your Servers</h1>
+                    <p css={tw`text-neutral-400 text-sm`}>Manage and monitor your instances in real-time.</p>
                 </div>
-            )}
+                {rootAdmin && (
+                    <div css={tw`flex items-center bg-black/40 p-2 px-4 rounded-xl border border-white/5`}>
+                        <p css={tw`uppercase text-[10px] font-bold tracking-wider text-neutral-500 mr-4`}>
+                            {showOnlyAdmin ? "ADMIN VIEW" : 'USER VIEW'}
+                        </p>
+                        <Switch
+                            name={'show_all_servers'}
+                            defaultChecked={showOnlyAdmin}
+                            onChange={() => setShowOnlyAdmin((s) => !s)}
+                        />
+                    </div>
+                )}
+            </div>
+
             {!servers ? (
                 <Spinner centered size={'large'} />
             ) : (

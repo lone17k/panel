@@ -27,27 +27,20 @@ const IconDescription = styled.p<{ $alarm: boolean }>`
     ${(props) => (props.$alarm ? tw`text-white` : tw`text-neutral-400`)};
 `;
 
-const StatusIndicatorBox = styled(GreyRowBox)<{ $status: ServerPowerState | undefined }>`
-    ${tw`grid grid-cols-12 gap-4 relative`};
+const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>`
+    ${tw`flex flex-col bg-white/[0.03] border border-white/5 rounded-2xl p-5 transition-all duration-300 relative overflow-hidden mb-4 hover:bg-white/[0.06] hover:border-white/10 hover:shadow-2xl`};
 
-    & .status-bar {
-        ${tw`w-2 bg-red-500 absolute right-0 z-20 rounded-full m-1 opacity-50 transition-all duration-150`};
-        height: calc(100% - 0.5rem);
-
+    &::before {
+        content: '';
+        ${tw`absolute top-0 left-0 w-1 h-full transition-all duration-300`};
         ${({ $status }) =>
             !$status || $status === 'offline'
-                ? tw`bg-red-500`
+                ? tw`bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]`
                 : $status === 'running'
-                ? tw`bg-green-500`
-                : tw`bg-yellow-500`};
-    }
-
-    &:hover .status-bar {
-        ${tw`opacity-75`};
+                ? tw`bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]`
+                : tw`bg-yellow-500 shadow-[0_0_15px_rgba(245,158,11,0.5)]`};
     }
 `;
-
-type Timer = ReturnType<typeof setInterval>;
 
 export default ({ server, className }: { server: Server; className?: string }) => {
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
@@ -64,14 +57,10 @@ export default ({ server, className }: { server: Server; className?: string }) =
     }, [stats?.isSuspended, server.status]);
 
     useEffect(() => {
-        // Don't waste a HTTP request if there is nothing important to show to the user because
-        // the server is suspended.
         if (isSuspended) return;
-
         getStats().then(() => {
             interval.current = setInterval(() => getStats(), 30000);
         });
-
         return () => {
             interval.current && clearInterval(interval.current);
         };
@@ -90,87 +79,59 @@ export default ({ server, className }: { server: Server; className?: string }) =
 
     return (
         <StatusIndicatorBox as={Link} to={`/server/${server.id}`} className={className} $status={stats?.status}>
-            <div css={tw`flex items-center col-span-12 sm:col-span-5 lg:col-span-6`}>
-                <div className={'icon mr-4'}>
-                    <FontAwesomeIcon icon={faServer} />
+            <div className={'flex flex-col sm:flex-row sm:items-center justify-between gap-4'}>
+                <div className={'flex items-center flex-1'}>
+                    <div className={'p-3 bg-white/5 rounded-xl mr-4'}>
+                        <FontAwesomeIcon icon={faServer} className={'text-xl text-cyan-400'} />
+                    </div>
+                    <div>
+                        <p className={'text-xl font-header font-semibold text-white'}>{server.name}</p>
+                        <p className={'text-xs text-neutral-500 font-mono mt-0.5'}>
+                            {server.allocations
+                                .filter((alloc) => alloc.isDefault)
+                                .map((allocation) => (
+                                    <React.Fragment key={allocation.ip + allocation.port.toString()}>
+                                        {allocation.alias || ip(allocation.ip)}:{allocation.port}
+                                    </React.Fragment>
+                                ))}
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <p css={tw`text-lg break-words`}>{server.name}</p>
-                    {!!server.description && (
-                        <p css={tw`text-sm text-neutral-300 break-words line-clamp-2`}>{server.description}</p>
-                    )}
-                </div>
-            </div>
-            <div css={tw`flex-1 ml-4 lg:block lg:col-span-2 hidden`}>
-                <div css={tw`flex justify-center`}>
-                    <FontAwesomeIcon icon={faEthernet} css={tw`text-neutral-500`} />
-                    <p css={tw`text-sm text-neutral-400 ml-2`}>
-                        {server.allocations
-                            .filter((alloc) => alloc.isDefault)
-                            .map((allocation) => (
-                                <React.Fragment key={allocation.ip + allocation.port.toString()}>
-                                    {allocation.alias || ip(allocation.ip)}:{allocation.port}
-                                </React.Fragment>
-                            ))}
-                    </p>
-                </div>
-            </div>
-            <div css={tw`hidden col-span-7 lg:col-span-4 sm:flex items-baseline justify-center`}>
-                {!stats || isSuspended ? (
-                    isSuspended ? (
-                        <div css={tw`flex-1 text-center`}>
-                            <span css={tw`bg-red-500 rounded px-2 py-1 text-red-100 text-xs`}>
-                                {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
-                            </span>
-                        </div>
-                    ) : server.isTransferring || server.status ? (
-                        <div css={tw`flex-1 text-center`}>
-                            <span css={tw`bg-neutral-500 rounded px-2 py-1 text-neutral-100 text-xs`}>
-                                {server.isTransferring
-                                    ? 'Transferring'
-                                    : server.status === 'installing'
-                                    ? 'Installing'
-                                    : server.status === 'restoring_backup'
-                                    ? 'Restoring Backup'
-                                    : 'Unavailable'}
+
+                <div className={'flex items-center gap-6'}>
+                    {!stats || isSuspended ? (
+                        <div className={'flex items-center'}>
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isSuspended ? 'bg-red-500/20 text-red-400' : 'bg-neutral-500/20 text-neutral-400'}`}>
+                                {isSuspended ? 'Suspended' : 'Loading...'}
                             </span>
                         </div>
                     ) : (
-                        <Spinner size={'small'} />
-                    )
-                ) : (
-                    <React.Fragment>
-                        <div css={tw`flex-1 ml-4 sm:block hidden`}>
-                            <div css={tw`flex justify-center`}>
-                                <Icon icon={faMicrochip} $alarm={alarms.cpu} />
-                                <IconDescription $alarm={alarms.cpu}>
-                                    {stats.cpuUsagePercent.toFixed(2)} %
-                                </IconDescription>
+                        <>
+                            <div className={'flex flex-col items-center min-w-[70px]'}>
+                                <div className={'flex items-center gap-1.5'}>
+                                    <FontAwesomeIcon icon={faMicrochip} className={`text-xs ${alarms.cpu ? 'text-red-400' : 'text-neutral-500'}`} />
+                                    <p className={'text-sm font-semibold text-neutral-200'}>{stats.cpuUsagePercent.toFixed(0)}%</p>
+                                </div>
+                                <p className={'text-[10px] text-neutral-600 uppercase font-bold'}>CPU</p>
                             </div>
-                            <p css={tw`text-xs text-neutral-600 text-center mt-1`}>of {cpuLimit}</p>
-                        </div>
-                        <div css={tw`flex-1 ml-4 sm:block hidden`}>
-                            <div css={tw`flex justify-center`}>
-                                <Icon icon={faMemory} $alarm={alarms.memory} />
-                                <IconDescription $alarm={alarms.memory}>
-                                    {bytesToString(stats.memoryUsageInBytes)}
-                                </IconDescription>
+                            <div className={'flex flex-col items-center min-w-[70px]'}>
+                                <div className={'flex items-center gap-1.5'}>
+                                    <FontAwesomeIcon icon={faMemory} className={`text-xs ${alarms.memory ? 'text-red-400' : 'text-neutral-500'}`} />
+                                    <p className={'text-sm font-semibold text-neutral-200'}>{bytesToString(stats.memoryUsageInBytes)}</p>
+                                </div>
+                                <p className={'text-[10px] text-neutral-600 uppercase font-bold'}>RAM</p>
                             </div>
-                            <p css={tw`text-xs text-neutral-600 text-center mt-1`}>of {memoryLimit}</p>
-                        </div>
-                        <div css={tw`flex-1 ml-4 sm:block hidden`}>
-                            <div css={tw`flex justify-center`}>
-                                <Icon icon={faHdd} $alarm={alarms.disk} />
-                                <IconDescription $alarm={alarms.disk}>
-                                    {bytesToString(stats.diskUsageInBytes)}
-                                </IconDescription>
-                            </div>
-                            <p css={tw`text-xs text-neutral-600 text-center mt-1`}>of {diskLimit}</p>
-                        </div>
-                    </React.Fragment>
-                )}
+                        </>
+                    )}
+                </div>
             </div>
-            <div className={'status-bar'} />
+            
+            {!!server.description && (
+                <p className={'text-sm text-neutral-500 mt-4 line-clamp-1 italic border-t border-white/5 pt-3'}>
+                    {server.description}
+                </p>
+            )}
         </StatusIndicatorBox>
     );
 };
+

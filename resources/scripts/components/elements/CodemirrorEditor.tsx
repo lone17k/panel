@@ -80,21 +80,22 @@ require('codemirror/mode/xml/xml');
 require('codemirror/mode/yaml/yaml');
 
 const EditorContainer = styled.div`
-    min-height: 16rem;
-    height: calc(100vh - 20rem);
+    height: 100%;
     ${tw`relative`};
 
     > div {
-        ${tw`rounded h-full`};
+        ${tw`h-full`};
     }
 
     .CodeMirror {
-        font-size: 12px;
-        line-height: 1.375rem;
+        font-size: 13px;
+        line-height: 1.5;
+        height: 100%;
+        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
     }
 
     .CodeMirror-linenumber {
-        padding: 1px 12px 0 12px !important;
+        padding: 0 16px 0 16px !important;
     }
 
     .CodeMirror-foldmarker {
@@ -104,6 +105,7 @@ const EditorContainer = styled.div`
         margin-right: 0.25rem;
     }
 `;
+
 
 export interface Props {
     style?: React.CSSProperties;
