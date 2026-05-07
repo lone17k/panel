@@ -177,8 +177,9 @@ export default () => {
                                 <FontAwesomeIcon icon={faFile} style={{ marginRight: '8px', fontSize: '12px' }} />
                                 {filename}
                             </div>
-                            <div className={tw`ml-auto flex items-center gap-2 pr-2`}>
+                            <div css={tw`ml-auto flex items-center gap-2 pr-2`}>
                                 <div className={vscode.status_item} title={'Save (Ctrl+S)'} onClick={() => save()}>
+
                                     <FontAwesomeIcon icon={faSave} />
                                 </div>
                                 <div className={vscode.status_item} title={'Reload'} onClick={() => mutate()}>
@@ -192,9 +193,9 @@ export default () => {
                         </div>
 
                         {hash.replace(/^#/, '').endsWith('.pteroignore') && (
-                            <div className={tw`p-2 bg-blue-900 bg-opacity-30 border-l-4 border-blue-500 m-2 rounded text-xs text-blue-100`}>
+                            <div css={tw`p-2 bg-blue-900 bg-opacity-30 border-l-4 border-blue-500 m-2 rounded text-xs text-blue-100`}>
                                 <p>
-                                    You&apos;re editing a <code className={tw`font-mono bg-black bg-opacity-40 rounded px-1`}>.pteroignore</code> file. 
+                                    You&apos;re editing a <code css={tw`font-mono bg-black bg-opacity-40 rounded px-1`}>.pteroignore</code> file. 
                                     Files listed here are excluded from backups. Wildcards (*) and negations (!) are supported.
                                 </p>
                             </div>
@@ -225,7 +226,7 @@ export default () => {
 
                 {/* Status Bar */}
                 <div className={vscode.status_bar}>
-                    <div className={tw`flex items-center h-full`}>
+                    <div css={tw`flex items-center h-full`}>
                         <div className={vscode.status_item}>
                             <FontAwesomeIcon icon={faCodeBranch} style={{ marginRight: '5px' }} />
                             main*
@@ -235,7 +236,8 @@ export default () => {
                             0
                         </div>
                     </div>
-                    <div className={tw`flex items-center h-full`}>
+                    <div css={tw`flex items-center h-full`}>
+
                         <div className={vscode.status_item}>UTF-8</div>
                         <div className={vscode.status_item}>Spaces: 4</div>
                         <div className={vscode.status_item}>
